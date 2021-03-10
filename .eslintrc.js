@@ -3,22 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'airbnb-base',
-    // 'plugin:import/errors',
-    // 'plugin:import/warnings',
-    'prettier',
-  ],
+  extends: ['airbnb-base', 'plugin:import/errors', 'plugin:import/warnings', 'prettier'],
   parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: [
-    '@babel',
-    'import',
-    // 'prettier'
-  ],
+  plugins: ['@babel', 'import'],
   rules: {
     // "@babel/new-cap": "error",
     // "@babel/no-invalid-this": "error",

@@ -16,15 +16,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.13.0",
-    "@babel/core": "^7.13.8",
-    "@babel/eslint-parser": "^7.13.8",
-    "@babel/preset-env": "^7.13.9",
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
+    "@babel/eslint-parser": "^7.13.10",
+    "@babel/eslint-plugin": "^7.13.10",
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
     "babel-loader": "^8.2.2",
     "babel-preset-airbnb": "^5.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^5.1.1",
-    "eslint": "^7.2.0",
+    "eslint": "^7.21.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
@@ -39,6 +41,8 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.12.1"
+    "@babel/runtime": "^7.13.10",
+    "@babel/runtime-corejs3": "^7.13.10",
+    "core-js": "^3.9.1"
   }
 }
