@@ -98,7 +98,14 @@
   // }
 
   &__caption {
-    @include caption;
     margin-top: calc(4 / 104 * 100%);
+  }
+
+  &:not(&_alternative-caption) &__caption {
+    @include caption;
+  }
+
+  &_alternative-caption &__caption {
+    @include caption(true);
   }
 }

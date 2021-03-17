@@ -31,7 +31,13 @@ main.leaders
                                 - const selected = leaders[selectedUserIndex];
 
                                 .leaders__person
-                                    +person({ avatar: selected.avatar, name: selected.name, caption: selected.valueText, emoji: selectedEmoji })
+                                    +person({ 
+                                        avatar: selected.avatar,
+                                        name: selected.name,
+                                        caption: selected.valueText,
+                                        emoji: selectedEmoji,
+                                        mods: ['alternative-caption']
+                                    })
                                 .leaders__place-number= selectedUserIndex + 1
 
 

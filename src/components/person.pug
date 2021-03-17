@@ -1,5 +1,6 @@
 mixin person(data)
-    .person
+    - const mods = data.mods?.map(mod => `person_${mod}`) ?? [];
+    .person(class=mods)
         .person__emoji= data.emoji || ''
         .person__avatar-wrapper
             picture

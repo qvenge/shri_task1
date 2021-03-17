@@ -1,8 +1,5 @@
 @import './common';
 
-// 2 / 47 = 16 / 376
-$factor: 1 / 94;
-
 html,
 body {
   @include body;
@@ -12,12 +9,9 @@ body {
   padding: 0;
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
   background: radial-gradient(circle at 50% 50%, #120c01 0%, #000000 100%);
-
-  @media (orientation: portrait) {
-    font-size: calc(16px + #{$factor} * (100vw - 376px));
-  }
+  font-size: calc(16px + 1 / 94 * (100vw - 376px));
 
   @media (orientation: landscape) {
-    font-size: calc(16px + #{$factor} * (100vh - 376px));
+    font-size: calc(16px + 1 / 94 * (100vh - 376px));
   }
 }
