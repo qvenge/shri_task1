@@ -1,25 +1,20 @@
-import SlideTemplate from './SlideTemplate';
-import Leaders from './Leaders';
+import leaders from './components/leaders.pug';
+// import DynamicAdapt from './DynamicAdapt';
 
-import Person from './Person';
+import './styles';
+// import './workshop.scss';
 
-import './style.scss';
-import './workshop.scss';
-
-window.Person = Person;
+// window.Person = Person;
+// document.addEventListener('DOMContentLoaded', () => {
+//   const da = new DynamicAdapt();
+// });
 
 window.renderTemplate = function renderTemplate(alias, data) {
-  let slideContent;
+  let slide;
 
   if (alias === 'leaders') {
-    slideContent = new Leaders(data);
+    slide = leaders(data);
   }
 
-  const slideTemplate = new SlideTemplate({
-    title: data.title,
-    subtitle: data.subtitle,
-    content: slideContent,
-  });
-
-  return slideTemplate.getHtmlElement().outerHTML;
+  return slide;
 };

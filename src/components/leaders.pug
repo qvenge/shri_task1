@@ -1,0 +1,39 @@
+include person.pug
+
+-
+    const selectedEmoji = '👍';
+    const leaders = users.slice(0, 4);
+    const selectedUserIndex = users.findIndex((userData) => userData.id === selectedUserId);
+    const lastLeader = selectedUserIndex > 4 ? users[selectedUserIndex] : users[4];
+    leaders.push(lastLeader);
+
+main.leaders
+    header.leaders__header
+        h1.leaders__title= title
+        h2.leaders__subtitle= subtitle
+    article.leaders__content 
+        ul.leaders__list
+            each userData, index in leaders
+                -
+                    const { avatar, name, valueText: caption } = userData;
+                    const place = index + 1;
+                    const userEmoji = (!index && emoji) || (userData.id === selectedUserId && selectedEmoji) || '';
+
+                li(class=[`leaders__awardee`, `leaders__awardee_place_${place}`])
+                    .leaders__person
+                        +person({ avatar, name, caption, emoji: !index ? emoji: userEmoji })
+                    .leaders__pedestal 
+                        .leaders__pedestal-bg
+                        .leaders__place-number= place
+
+                        if !index && selectedUserIndex > 2
+                            .leaders__selected-participant
+                                - const selected = leaders[selectedUserIndex];
+
+                                .leaders__person
+                                    +person({ avatar: selected.avatar, name: selected.name, caption: selected.valueText, emoji: selectedEmoji })
+                                .leaders__place-number= selectedUserIndex + 1
+
+
+
+        

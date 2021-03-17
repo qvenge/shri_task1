@@ -1,0 +1,12 @@
+mixin person(data)
+    .person
+        .person__emoji= data.emoji || ''
+        .person__avatar-wrapper
+            picture
+                source(srcset=`images/1x/${data.avatar}`, media='(max-width: 376px)')
+                source(srcset=`images/2x/${data.avatar}`, media='(max-width: 752px)')
+                source(srcset=`images/3x/${data.avatar}`, media='(max-width: 1128px)')
+                img.person__avatar(src=`images/4x/${data.avatar}`)
+        .person__name!= data.name.split(' ').filter(Boolean).join('<br>')
+        if data.caption
+            .person__caption= data.caption

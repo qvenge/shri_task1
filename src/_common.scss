@@ -1,0 +1,73 @@
+%fullscreen-slide {
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 50%, #120c01 0%, #000000 100%);
+}
+
+%primary-font-color {
+  color: #fcfbf7;
+
+  .theme_light & {
+    color: #261c00;
+  }
+}
+
+%secondary-font-color {
+  color: #918f8a;
+
+  .theme_light & {
+    color: #bfbfbf;
+  }
+}
+
+@mixin headline {
+  @extend %primary-font-color;
+
+  font-size: 1.875rem;
+  line-height: calc(100% + 2px);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0px;
+}
+
+@mixin subhead($alternative-color: false) {
+  @if $alternative-color {
+    @extend %secondary-font-color;
+  } @else {
+    @extend %primary-font-color;
+  }
+
+  font-size: 1.25rem;
+  line-height: calc(100% + 2px);
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0px;
+}
+
+@mixin body($alternative-color: false) {
+  @if $alternative-color {
+    @extend %secondary-font-color;
+  } @else {
+    @extend %primary-font-color;
+  }
+
+  font-size: 1rem;
+  line-height: calc(100% + 2px);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0px;
+}
+
+@mixin caption($alternative-color: false) {
+  @if $alternative-color {
+    @extend %primary-font-color;
+  } @else {
+    @extend %secondary-font-color;
+  }
+
+  font-size: 0.875rem;
+  line-height: calc(100% + 2px);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0px;
+}
