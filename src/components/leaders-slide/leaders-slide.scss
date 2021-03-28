@@ -19,7 +19,7 @@
 
   &__content {
     padding: 0 1.5rem;
-    flex-grow: 1;
+    flex: 1 1 0;
 
     @media (orientation: landscape) {
       padding: 0 calc(66 / 16 * 1rem);
