@@ -1,0 +1,45 @@
+include ../person/person.pug
+include ../header/header.pug
+
+-
+    const selectedEmoji = '👍';
+    const leaders = users.slice(0, 4);
+    const selectedUserIndex = users.findIndex((userData) => userData.id === selectedUserId);
+    const lastLeader = selectedUserIndex > 4 ? users[selectedUserIndex] : users[4];
+    if (lastLeader) leaders.push(lastLeader);
+
+.leaders-slide
+    header.leaders-slide__header
+        +header(title, subtitle)
+    main.leaders-slide__content 
+        ul.leaders-slide__list
+            each userData, index in leaders
+                -
+                    const { avatar, name, valueText: caption } = userData;
+                    const place = index + 1;
+                    const userEmoji = (!index && emoji) || (userData.id === selectedUserId && selectedEmoji) || '';
+
+                li(class=[`leaders-slide__awardee`, `leaders-slide__awardee_place_${place}`])
+                    .leaders-slide__person
+                        +person({ avatar, name, caption, emoji: !index ? emoji: userEmoji })
+                    .leaders-slide__pedestal 
+                        .leaders-slide__pedestal-bg
+                        .leaders-slide__place-number= place
+
+                        if !index && selectedUserIndex > 2
+                            .leaders-slide__selected-participant
+                                - const selected = leaders[selectedUserIndex];
+
+                                .leaders-slide__person
+                                    +person({ 
+                                        avatar: selected.avatar,
+                                        name: selected.name,
+                                        caption: selected.valueText,
+                                        emoji: selectedEmoji,
+                                        mods: ['alternative-caption']
+                                    })
+                                .leaders-slide__place-number= selectedUserIndex + 1
+
+
+
+        
