@@ -1,0 +1,13 @@
+mixin person(data = {})
+    - const mods = data.mods?.filter(Boolean).map(mod => `person_${mod}`) ?? [];
+    .person(class=mods)
+        .person__emoji= data.emoji || ''
+        picture
+            source(srcset=`images/1x/${data.avatar}`, media='(max-width: 376px)')
+            source(srcset=`images/2x/${data.avatar}`, media='(max-width: 752px)')
+            source(srcset=`images/3x/${data.avatar}`, media='(max-width: 1128px)')
+            img.person__avatar(src=`images/4x/${data.avatar}` alt=`${data.name}`)
+        //- .person__name!= data.name.split(' ').filter(Boolean).join('<br>')
+        .person__name!= data.name
+        if data.caption
+            .person__caption= data.caption
