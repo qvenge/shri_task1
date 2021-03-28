@@ -1,0 +1,24 @@
+//- использую css custom properties, чтобы передать данные в css
+//- если shift > 0, то сдвиг слева, иначе справа
+mixin barChart(values = [], shift = 0)
+    -
+        const maxValue = values.reduce((max, { value }) => max < value ? value : max, values[0].value);
+        const shiftType = shift < 0 ? 'right' : 'left';
+        const shiftRatio = shift < 0 ? -(shift + 1) : shift;
+        const chartStyle = {
+            '--chart-max-value': maxValue,
+            [`--chart-${shiftType}-shift-ratio`]: shiftRatio,
+            '--chart-length': values.length
+        };
+    
+    .bar-chart
+        .bar-chart__graph(style=chartStyle)
+            each valueData in values
+                -
+                    const barStyle = {
+                        '--chart-bar-value': valueData.value,
+                        '--chart-bar-string-value': `"${valueData.value ? valueData.value : ''}"`,
+                        '--chart-bar-title': `"${valueData.title}"`
+                    };
+
+                .bar-chart__bar(class=valueData.active ? 'bar-chart__bar_active' : '', style=barStyle)

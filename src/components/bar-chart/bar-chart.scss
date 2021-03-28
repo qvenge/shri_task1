@@ -1,0 +1,88 @@
+@import '../../common';
+
+$bar-width: 2.5rem;
+
+.bar-chart {
+  box-sizing: border-box;
+  position: relative;
+  padding-bottom: 1.875rem;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  &__graph {
+    // отступы между столбцами зависят от ширины контейнера
+    --bar-margin: calc((100% - 14.5rem) / 6);
+
+    @media (orientation: landscape) {
+      --bar-margin: calc((100% - 22.5rem) / 10);
+    }
+
+    --chart-right-shift: calc(-1 * var(--chart-right-shift-ratio) * (#{$bar-width} + var(--bar-margin)));
+    --chart-left-shift: calc(-1 * var(--chart-left-shift-ratio) * (#{$bar-width} + var(--bar-margin)));
+
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    bottom: 1.857rem;
+    left: var(--chart-left-shift, auto);
+    right: var(--chart-right-shift, auto);
+    width: calc(var(--chart-length) * #{$bar-width} + (var(--chart-length) + 1) * var(--bar-margin));
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-evenly;
+  }
+
+  &__bar {
+    position: relative;
+    width: $bar-width;
+    height: calc(var(--chart-bar-value) / var(--chart-max-value) * 70%);
+    min-height: 0.5rem;
+    border-radius: calc(6 / 16 * 1rem);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%),
+      radial-gradient(149.08% 93.3% at 38.75% 72.1%, #000000 0%, #231900 0.01%, #4d4d4d 100%);
+    box-shadow: inset -1px 1px 1px rgba(255, 255, 255, 0.2), inset 2px 2px 16px rgba(103, 103, 103, 0.6);
+
+    .theme_light & {
+      background: linear-gradient(180deg, rgba(244, 244, 244, 0.9) 0.82%, #e9e9e9 100%, rgba(234, 234, 234, 0) 100%);
+      box-shadow: inset -1px 1px 1px rgba(255, 255, 255, 0.5), inset 0px 0px 20px rgba(207, 207, 207, 0.5);
+    }
+  }
+
+  &__bar_active {
+    background: radial-gradient(81.14% 100% at 50% 0%, #ffa300 0%, #2d1c00 100%);
+    box-shadow: inset -1px 1px 1px rgba(255, 255, 255, 0.4), inset 0px 6px 15px rgba(255, 162, 0, 0.5);
+
+    .theme_light & {
+      background: linear-gradient(180deg, #fff2d1 0.82%, #ffd66c 100%);
+      box-shadow: inset -1px 1px 1px rgba(255, 255, 255, 0.5), inset 0px 0px 20px rgba(255, 176, 57, 0.8);
+    }
+  }
+
+  &__bar::before {
+    @extend %subhead;
+    position: absolute;
+    content: var(--chart-bar-string-value);
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+
+  &__bar:not(&__bar_active)::before {
+    @extend %secondary-font-color;
+  }
+
+  &__bar_active::before {
+    @extend %primary-font-color;
+  }
+
+  &__bar::after {
+    @extend %body;
+    @extend %secondary-font-color;
+    position: absolute;
+    content: var(--chart-bar-title);
+    top: calc(100% + 0.75rem);
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+}
