@@ -1,0 +1,21 @@
+@import '../../common';
+
+.header {
+  text-align: left;
+
+  @media (orientation: landscape) {
+    text-align: center;
+  }
+
+  &__title {
+    @extend %headline;
+    @extend %primary-font-color;
+    margin: 0;
+  }
+
+  &__subtitle {
+    @extend %body;
+    @extend %secondary-font-color;
+    margin: 0.5rem 0 0 0;
+  }
+}
