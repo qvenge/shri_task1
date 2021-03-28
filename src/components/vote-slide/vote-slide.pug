@@ -1,0 +1,26 @@
+include ../header/header.pug
+include ../person/person.pug
+include ../button/button.pug
+
+-
+    const selectedEmoji = '👍';
+    const participants = users.slice(0, 8);
+
+.vote-slide
+    header.vote-slide__header
+        +header(title, subtitle)
+    main.vote-slide__content
+        .vote-slide__button.vote-slide__button_prev
+            +button({ direction: 'top', disabled: true })
+        .vote-slide__button.vote-slide__button_next
+            +button
+        each userData in participants
+            - const isSelectedUser = userData.id === selectedUserId;
+            .vote-slide__participant
+                +person({
+                    avatar: userData.avatar,
+                    name: userData.name,
+                    caption: userData.caption,
+                    emoji: isSelectedUser ? selectedEmoji : '',
+                    mods: ['hoverable'].concat(isSelectedUser ? 'active' : '')
+                })
