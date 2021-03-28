@@ -1,0 +1,18 @@
+mixin heatMapLegend(data)
+    ul.heat-map-legend
+        li.heat-map-legend__item
+            .heat-map-legend__visual.heat-map-legend__visual_scale: div
+            .heat-map-legend__text.heat-map-legend__text_portrait 1 час
+            .heat-map-legend__text.heat-map-legend__text_landscape 2 часа
+        li.heat-map-legend__item
+            .heat-map-legend__visual.heat-map-legend__visual_min
+            .heat-map-legend__text 0
+        li.heat-map-legend__item
+            .heat-map-legend__visual.heat-map-legend__visual_mid
+            .heat-map-legend__text 1 &mdash; 2
+        li.heat-map-legend__item
+            .heat-map-legend__visual.heat-map-legend__visual_max
+            .heat-map-legend__text 3 &mdash; 4
+        li.heat-map-legend__item
+            .heat-map-legend__visual.heat-map-legend__visual_extra
+            .heat-map-legend__text 5 &mdash; 6
