@@ -1,0 +1,40 @@
+@import '../../common';
+
+.button {
+  width: 4rem;
+  height: 4rem;
+
+  &:not(&_disabled) {
+    cursor: pointer;
+  }
+
+  &_direction_top {
+    transform: rotate(180deg);
+  }
+
+  &_direction_left {
+    transform: rotate(90deg);
+  }
+
+  &_direction_right {
+    transform: rotate(-90deg);
+  }
+
+  &__circle-path {
+    fill: #fcfbf7;
+
+    .theme_light & {
+      fill: #f4b000;
+    }
+  }
+
+  &_disabled &__circle-path,
+  &:hover &__circle-path,
+  &:active &__circle-path {
+    fill: #918f8a;
+
+    .theme_light & {
+      fill: #bfbfbf;
+    }
+  }
+}

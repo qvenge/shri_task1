@@ -1,0 +1,14 @@
+mixin button(data = {})
+    -
+        //- const mods = [].concat(data.mods).filter(Boolean).map(mod => `button_${mod}`);
+        const classes = [];
+
+        if (data.disabled) {
+            classes.push('button_disabled');
+        }
+        if (data.direction) {
+            classes.push('button_direction_' + data.direction);
+        }
+
+    .button(class=classes)&attributes(attributes)
+        include button.svg
