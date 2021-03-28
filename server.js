@@ -17,7 +17,7 @@ app.use(webpackDevMiddleware(compiler, { publicPath: webpackConfig.output.public
 app.use(webpackHotMiddleware(compiler));
 
 app.get('/', (req, res) => {
-  const { slide, theme = 'dark' } = req.query;
+  const { slide = 1, theme = 'dark' } = req.query;
   const { alias, data } = dataArray[Number(slide) - 1] ?? dataArray[0];
   res.render('index', { title: data.title, theme, alias, data: JSON.stringify(data) });
 });

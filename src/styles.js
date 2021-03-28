@@ -1,4 +1,15 @@
 import './fonts.scss';
 import './style.scss';
-import './components/person.scss';
-import './components/leaders.scss';
+import './components/person/person.scss';
+import './components/button/button.scss';
+import './components/header/header.scss';
+import './components/list/list.scss';
+import './components/bar-chart/bar-chart.scss';
+import './components/circle-chart/circle-chart.scss';
+import './components/heat-map/heat-map.scss';
+import './components/heat-map-legend/heat-map-legend.scss';
+import './components/leaders-slide/leaders-slide.scss';
+import './components/vote-slide/vote-slide.scss';
+import './components/chart-slide/chart-slide.scss';
+import './components/diagram-slide/diagram-slide.scss';
+import './components/activity-slide/activity-slide.scss';
