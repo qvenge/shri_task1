@@ -1,0 +1,12 @@
+include ../header/header.pug
+include ../heat-map/heat-map.pug
+include ../heat-map-legend/heat-map-legend.pug
+
+.activity-slide
+    header.activity-slide__header
+        +header(title, subtitle)
+    main.activity-slide__content
+        section.activity-slide__heat-map
+            +heatMap(data)
+        section.activity-slide__legend
+            +heatMapLegend
