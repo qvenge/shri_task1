@@ -1,0 +1,12 @@
+mixin list(dataArray, template = null, mods = [])
+    - const classes = mods.map(mod => `list_${mod}`);
+
+    ul.list(class=classes)
+        each data, index in dataArray
+            li.list__item
+                if typeof template === 'string' 
+                    +#{template}(data, index)
+                else if typeof template === 'function'
+                    != template(data, index)
+                else
+                    != data
