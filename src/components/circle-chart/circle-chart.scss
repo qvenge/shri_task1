@@ -1,0 +1,79 @@
+@import '../../common';
+
+.circle-chart {
+  width: 20.5rem;
+  height: 20.5rem;
+  position: relative;
+
+  @media (orientation: landscape) {
+    width: 15rem;
+    height: 15rem;
+  }
+
+  &__info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10.25rem;
+    text-align: center;
+
+    @media (orientation: landscape) {
+      width: 7.5rem;
+    }
+  }
+
+  &__title {
+    @extend %headline;
+    @extend %primary-font-color;
+    margin: 0;
+
+    @media (orientation: landscape) {
+      font-size: 1.25rem;
+    }
+  }
+
+  &__subtitle {
+    @extend %subhead;
+    @extend %secondary-font-color;
+    margin-top: 0.5rem;
+
+    @media (orientation: landscape) {
+      margin-top: calc(6 / 16 * 1rem);
+      font-size: 1rem;
+    }
+  }
+
+  &__graph {
+    width: 100%;
+    height: 100%;
+  }
+
+  @for $i from 0 through 3 {
+    &__segment-#{$i} {
+      &-dropshadows-layer {
+        filter: url(#segment-#{$i}-dropshadows-dark);
+      }
+
+      &-gradient-layer {
+        fill: url(#segment-#{$i}-gradient-dark);
+      }
+
+      &-insetshadows-layer {
+        filter: url(#segment-#{$i}-insetshadows-dark);
+      }
+
+      .theme_light &-dropshadows-layer {
+        filter: url(#segment-#{$i}-dropshadows-light);
+      }
+
+      .theme_light &-gradient-layer {
+        fill: url(#segment-#{$i}-gradient-light);
+      }
+
+      .theme_light &-insetshadows-layer {
+        filter: url(#segment-#{$i}-insetshadows-light);
+      }
+    }
+  }
+}

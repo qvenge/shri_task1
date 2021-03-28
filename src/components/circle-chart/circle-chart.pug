@@ -1,0 +1,128 @@
+-
+    const { origin, radius, borderRadius, innerRadiusRatio, details } = require('../circle-chart/settings.js').default;
+    const {
+        calcRadialEndPoint,
+        calcLinearEndPoint,
+        renderArc,
+        renderLine,
+        renderCorner,
+        calcRadialOffset
+    } = require('../circle-chart/utils.js');
+
+mixin circleChart(params = {})
+    -
+        //- расстояния от угла, которые определяют форму скругления
+        //- [точка на прямой, точка на дуге]
+        const outerCornerParams = [borderRadius, 2 * borderRadius / 180];
+        const innerCornerParams = [borderRadius, 2 * borderRadius / 180];
+
+        const totalValue = params.values.reduce((accum, value) => accum + value);
+        const startPoint = calcRadialEndPoint({
+            origin,
+            startPoint: [origin[0], origin[1] - radius],
+            angle: -(2 * Math.PI * values[0] / totalValue - Math.PI / 180) / 2
+        });
+
+        const defaultShadow = { inset: false, dx: 0, dy: 0, color: '#000000', opacity: 1, blur: 0, spread: 0, };
+
+        const segmentsData = values.map((value, index) => {
+            const sumOfPreviousValues = values.slice(0, index).reduce((accum, value) => accum + value, 0);
+            const startAngle = 2 * Math.PI * sumOfPreviousValues / totalValue;
+            const angle = 2 * Math.PI * value / totalValue - Math.PI / 180;
+
+            const cornerPoint0 = calcRadialEndPoint({ origin, startPoint: startPoint, angle: startAngle });
+            const cornerPoint1 = calcRadialEndPoint({ origin, startPoint: cornerPoint0, angle });
+            const cornerPoint2 = calcLinearEndPoint({ startPoint: origin, endPoint: cornerPoint1, mod: innerRadiusRatio * radius });
+            const cornerPoint3 = calcLinearEndPoint({ startPoint: origin, endPoint: cornerPoint0, mod: innerRadiusRatio * radius });
+
+            const point0 = calcLinearEndPoint({ startPoint: cornerPoint0, endPoint: origin, mod: outerCornerParams[0] });
+            const point1 = calcRadialEndPoint({ origin, startPoint: cornerPoint0, angle: outerCornerParams[1] });
+            const point2 = calcRadialEndPoint({ origin, startPoint: cornerPoint1, angle: -outerCornerParams[1]});
+            const point3 = calcLinearEndPoint({ startPoint: cornerPoint1, endPoint: origin, mod: outerCornerParams[0] });
+            const point4 = calcLinearEndPoint({ startPoint: cornerPoint2, endPoint: cornerPoint1, mod: innerCornerParams[0] });
+            const point5 = calcRadialEndPoint({ origin, startPoint: cornerPoint2, angle: -innerCornerParams[1]});
+            const point6 = calcRadialEndPoint({ origin, startPoint: cornerPoint3, angle: innerCornerParams[1]});
+            const point7 = calcLinearEndPoint({ startPoint: cornerPoint3, endPoint: cornerPoint0, mod: innerCornerParams[0] });
+
+            const d = [
+                `M ${point0.join(' ')}`,
+                renderCorner({ borderRadius, endPoint: point1 }),
+                renderArc({ origin, startPoint: point1, endPoint: point2 }),
+                renderCorner({ borderRadius, endPoint: point3 }),
+                renderLine(point4),
+                renderCorner({ borderRadius, endPoint: point5 }),
+                renderArc({ origin, startPoint: point5, endPoint: point6, anticlockwise: true }),
+                renderCorner({ borderRadius, endPoint: point7 }),
+                `Z`
+            ].join(' ');
+
+            return {
+                d,
+                cornerPoint0, cornerPoint1, cornerPoint2, cornerPoint3,
+                point0, point1, point2, point3, point4, point5, point6, point7
+            };
+        });
+
+    .circle-chart
+        section.circle-chart__info
+            .circle-chart__title= params.title
+            .circle-chart__subtitle= params.subtitle
+        svg.circle-chart__graph(viewbox="0 0 240 240"  xmlns="http://www.w3.org/2000/svg")
+            defs
+                each segment, index in segmentsData
+                    path(id=`segment-${index}` d=segment.d)
+
+                each themeParams, segmentIndex in details
+                    each effects, themeName in themeParams
+                        -
+                            const { gradient, shadows, opacity } = effects;
+                            const dropShadows = shadows.filter(shadow => !shadow.inset);
+                            const insetShadows = shadows.filter(shadow => shadow.inset);
+
+                        //- GRADIENT
+                        radialGradient(id=`segment-${segmentIndex}-gradient-${themeName}` cx=`${origin[0]}` cy=`${origin[1]}` r=`${radius}` gradientUnits="userSpaceOnUse")
+                            stop(offset="0" stop-color="#000000" stop-opacity="0")
+                            each stop in gradient
+                                stop(offset=`${stop.offset}` stop-color=`${stop.color}` stop-opacity=`${stop.opacity}`)
+
+                        //- DROPSHADOWS
+                        filter(id=`segment-${segmentIndex}-dropshadows-${themeName}` x="-50%" y="-50%" width="200%" height="200%")   
+                            each shadowParams, shadowIndex in dropShadows
+                                -
+                                    const shadow = { ...defaultShadow, ...shadowParams };
+                                    if (shadowParams.radialOffset) {
+                                        const offset = calcRadialOffset(origin, segmentsData[segmentIndex], shadowParams.radialOffset);
+                                        Object.assign(shadow, offset);
+                                    }
+                                    const { dx, dy, color, opacity, blur, spread } = shadow;
+
+                                feGaussianBlur(in="SourceAlpha" stdDeviation=`${blur}`)
+                                feOffset(dx=`${dx}`, dy=`${dy}`)
+                                feMorphology(result="BLANK" operator=`${spread < 0 ? 'erode' : 'dilate'}` radius=`${Math.abs(spread)}`)
+                                feFlood(flood-color=color flood-opacity=`${opacity}`)
+                                feComposite(in2="BLANK" operator="in" result=`DROPSHADOW${shadowIndex}`)
+                            feMerge
+                                each _, shadowIndex in dropShadows
+                                    feMergeNode(in=`DROPSHADOW${shadowIndex}`)
+
+                        //- INSETSHADOWS
+                        filter(id=`segment-${segmentIndex}-insetshadows-${themeName}` x="-50%" y="-50%" width="200%" height="200%")   
+                            each shadowParams, shadowIndex in insetShadows
+                                - const { dx, dy, color, opacity, blur, spread } = { ...defaultShadow, ...shadowParams };
+
+                                feGaussianBlur(in="SourceAlpha" stdDeviation=`${blur}`)
+                                feOffset(dx=`${dx}`, dy=`${dy}`)
+                                feMorphology(result="BLANK" operator=`${spread < 0 ? 'dilate' : 'erode'}` radius=`${Math.abs(spread)}`)
+                                feFlood(flood-color=color flood-opacity=`${opacity}`)
+                                feComposite(in2="BLANK" operator="out")
+                                feComposite(in2="SourceAlpha" operator="in" result=`INSETSHADOW${shadowIndex}`)
+                            feMerge
+                                each _, shadowIndex in insetShadows
+                                    feMergeNode(in=`INSETSHADOW${shadowIndex}`)
+
+            each value, index in values
+                - const segmentClass = `circle-chart__segment-${index}`;
+                g(class=segmentClass)
+                    use(class=`${segmentClass}-dropshadows-layer`, fill="black", xlink:href=`#segment-${index}`)
+                    use(class=`${segmentClass}-gradient-layer`, xlink:href=`#segment-${index}`)
+                    use(class=`${segmentClass}-insetshadows-layer`, fill="black", xlink:href=`#segment-${index}`)
