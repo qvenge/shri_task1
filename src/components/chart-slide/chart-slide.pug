@@ -1,0 +1,23 @@
+include ../person/person.pug
+include ../header/header.pug
+include ../bar-chart/bar-chart.pug
+include ../list/list.pug
+
+-
+    const graphShift = -1;
+    const personsList = users.slice(0, 2).map(({ avatar, name, valueText }) => ({
+        avatar,
+        name,
+        caption: valueText,
+        mods: ['horizontal']
+    }));
+
+.chart-slide
+    header.chart-slide__header
+        +header(title, subtitle)
+    main.chart-slide__content
+        section.chart-slide__graph
+            +barChart(values.slice(4, 13), graphShift)
+        section.chart-slide__leaders
+            +list(personsList, "person")
+        
