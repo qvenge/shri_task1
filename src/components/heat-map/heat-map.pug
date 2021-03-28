@@ -1,0 +1,29 @@
+mixin heatMap(data={})
+    -
+        const rateCommits = (commits) => {
+            let rate = 'min';
+
+            if (commits > 4) {
+                rate = 'extra';
+            } else if (commits > 2) {
+                rate = 'max';
+            } else if (commits > 0) {
+                rate = 'mid';
+            }
+
+            return rate;
+        };
+
+    .heat-map
+        .heat-map__container
+            each hours, day in data
+                each commits, index in hours
+                    .heat-map__item(class=[`heat-map__item_day_${day}`, `heat-map__item_hour_${index + 1}`])
+                        - const rate = rateCommits(commits);
+                        img.heat-map__sprite.heat-map__sprite_one-hour.heat-map__sprite_dark(src=`images/${rate}-dark.svg`)
+                        img.heat-map__sprite.heat-map__sprite_one-hour.heat-map__sprite_light(src=`images/${rate}-light.svg`)
+
+                        if index % 2 == 0
+                            - const rateForTwoHours = rateCommits(commits + hours[index + 1]);
+                            img.heat-map__sprite.heat-map__sprite_two-hours.heat-map__sprite_dark(src=`images/${rateForTwoHours}-dark.svg`)
+                            img.heat-map__sprite.heat-map__sprite_two-hours.heat-map__sprite_light(src=`images/${rateForTwoHours}-light.svg`)

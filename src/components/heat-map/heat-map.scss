@@ -1,0 +1,110 @@
+@use 'sass:math';
+@import '../../common';
+
+$days: (
+  1: 'mon',
+  2: 'tue',
+  3: 'wed',
+  4: 'thu',
+  5: 'fri',
+  6: 'sat',
+  7: 'sun',
+);
+
+.heat-map {
+  position: relative;
+  width: 100%;
+  height: 0px;
+  padding-top: calc(438 / 328 * 100%);
+
+  @media (orientation: landscape) {
+    padding-top: calc(112 / 425 * 100%);
+  }
+
+  &__container {
+    position: absolute;
+    top: calc(28 / 326 * 100%); // подобрал коэффициент вручную
+    left: calc(17 / 255 / 2 * 100%);
+    right: calc(17 / 255 / 2 * 100%);
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: stretch;
+
+    @media (orientation: landscape) {
+      top: calc(21 / 112 * 100%); // подобрал коэффициент вручную
+      left: calc(17 / 425 / 2 * 100%);
+      right: calc(17 / 425 / 2 * 100%);
+      flex-direction: row;
+    }
+  }
+
+  &__item {
+    flex-basis: calc(1 / 24 * 100%);
+    position: relative;
+
+    @media (orientation: landscape) {
+      flex-basis: calc(1 / 12 * 100%);
+    }
+  }
+
+  &__sprite {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    display: none;
+
+    @media (orientation: portrait) {
+      body:not(.theme_light) &_one-hour#{& + '_dark'} {
+        display: block;
+      }
+
+      .theme_light &_one-hour#{& + '_light'} {
+        display: block;
+      }
+    }
+
+    @media (orientation: landscape) {
+      body:not(.theme_light) &_two-hours#{& + '_dark'} {
+        display: block;
+      }
+
+      .theme_light &_two-hours#{& + '_light'} {
+        display: block;
+      }
+    }
+  }
+
+  @media (orientation: portrait) {
+    &__item:nth-child(odd) &__sprite {
+      left: -25%;
+    }
+
+    &__item:nth-child(even) &__sprite {
+      right: -25%;
+    }
+
+    @for $i from 1 through 24 {
+      &__item_hour_#{$i} {
+        z-index: $i;
+      }
+    }
+  }
+
+  @media (orientation: landscape) {
+    &__item:nth-child(2n) {
+      display: none;
+    }
+
+    @each $i, $day in $days {
+      &__item_day_#{$day} {
+        z-index: $i;
+      }
+
+      &__item_day_#{$day} &__sprite {
+        left: math.pow(-1, $i) * 25%;
+      }
+    }
+  }
+}
