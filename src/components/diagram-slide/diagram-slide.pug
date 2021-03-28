@@ -1,0 +1,25 @@
+include ../header/header.pug
+include ../list/list.pug
+include ../circle-chart/circle-chart.pug
+
+mixin category(data, index)
+    -
+        const value = data.valueText?.split(' ')[0] ?? '';
+        const difference = data.differenceText?.split(' ')[0] ?? '';
+        const classes = `diagram-slide__category_${index + 1}`;
+    
+    .diagram-slide__category(class=classes)
+        .diagram-slide__category-title= data.title
+        .diagram-slide__category-difference= difference
+        .diagram-slide__category-value= value
+
+- const values = categories.map(({ valueText }) => Number(valueText.split(' ')[0]));
+
+.diagram-slide
+    header.diagram-slide__header
+        +header(title, subtitle)
+    main.diagram-slide__content
+        .diagram-slide__circle
+            +circleChart({ title: totalText, subtitle: differenceText, values })
+        .diagram-slide__categories
+            +list(categories, 'category', ['column'])
