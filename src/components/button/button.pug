@@ -1,14 +1,20 @@
-mixin button(data = {})
+mixin button(params = {})
     -
-        //- const mods = [].concat(data.mods).filter(Boolean).map(mod => `button_${mod}`);
+        const attrs = { ...attributes };
+        //- const mods = [].concat(params.mods).filter(Boolean).map(mod => `button_${mod}`);
         const classes = [];
 
-        if (data.disabled) {
+        if (params.disabled) {
             classes.push('button_disabled');
         }
-        if (data.direction) {
-            classes.push('button_direction_' + data.direction);
+
+        if (params.direction) {
+            classes.push('button_direction_' + params.direction);
         }
 
-    .button(class=classes)&attributes(attributes)
+        const dataAction = params.action.type ?? '';
+        const dataParams = JSON.stringify(params.action.data ?? '');
+
+
+    .button(class=classes, data-action=dataAction, data-params=dataParams)
         include button.svg

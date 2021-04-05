@@ -4,23 +4,78 @@ include ../button/button.pug
 
 -
     const selectedEmoji = '👍';
-    const participants = users.slice(0, 8);
+    const slideOffset = offset ?? 0;
+    const verticalStart = Math.floor(slideOffset / 8) * 8;
+    const horizontalStart = Math.floor(slideOffset / 6) * 6;
+    const participants = {};
+
+    for (let index = 0; index < 8; ++index) {
+        const userIndex = verticalStart + index;
+
+        if (userIndex < users.length) {
+            participants[userIndex] = { user: users[userIndex], purposes: [ 'portrait', `portrait_${index + 1}` ] };
+        }
+    }
+
+    for (let index = 0; index < 6; ++index) {
+        const userIndex = horizontalStart + index;
+
+        if (userIndex < users.length) {
+            let participant = participants[userIndex];
+
+            if (!participant) {
+                participant = { user: users[userIndex], purposes: [] };
+                participants[userIndex] = participant;
+            }
+
+            participant.purposes = participant.purposes.concat('landscape', `landscape_${index + 1}`);
+        }
+    }
+
+    const prevHorizontalButtonParams = { alias: 'vote', data: { offset: horizontalStart - 6 } };
+    const prevVerticalButtonParams = { alias: 'vote', data: { offset: verticalStart - 8 } };
+    const nextHorizontalButtonParams = { alias: 'vote', data: { offset: horizontalStart + 6 } };
+    const nextVerticalButtonParams = { alias: 'vote', data: { offset: horizontalStart + 8 } };
+
 
 .vote-slide
     header.vote-slide__header
         +header(title, subtitle)
     main.vote-slide__content
-        .vote-slide__button.vote-slide__button_prev
-            +button({ direction: 'top', disabled: true })
-        .vote-slide__button.vote-slide__button_next
-            +button
-        each userData in participants
-            - const isSelectedUser = userData.id === selectedUserId;
-            .vote-slide__participant
+        .vote-slide__button.vote-slide__button_prev.vote-slide__button_portrait
+            +button({ 
+                direction: 'top',
+                disabled: verticalStart - 8 < 0,
+                action: { type: 'update', data: prevVerticalButtonParams }
+            })
+        .vote-slide__button.vote-slide__button_prev.vote-slide__button_landscape
+            +button({
+                direction: 'top',
+                disabled: horizontalStart - 6 < 0,
+                action: { type: 'update', data: prevHorizontalButtonParams }
+            })
+        .vote-slide__button.vote-slide__button_next.vote-slide__button_portrait
+            +button({
+                disabled: users.length <= verticalStart + 8,
+                action: { type: 'update', data: nextVerticalButtonParams }
+            })
+        .vote-slide__button.vote-slide__button_next.vote-slide__button_landscape
+            +button({
+                disabled: users.length <= horizontalStart + 6,
+                action: { type: 'update', data: nextVerticalButtonParams }
+            })
+        each userIndex in Object.keys(participants).map(Number).sort((a, b) => a - b)
+            -
+                const { user, purposes } = participants[userIndex];
+                const classes = purposes.map(purpose => `vote-slide__participant_${purpose}`);
+                const isSelectedUser = user.id === selectedUserId;
+                const actionUserParams = { alias: 'leaders', data: { selectedUserId: user.id } };
+
+            .vote-slide__participant(class=classes data-action="update" data-params=JSON.stringify(actionUserParams))
                 +person({
-                    avatar: userData.avatar,
-                    name: userData.name,
-                    caption: userData.caption,
+                    avatar: user.avatar,
+                    name: user.name,
+                    caption: user.caption,
                     emoji: isSelectedUser ? selectedEmoji : '',
                     mods: ['hoverable'].concat(isSelectedUser ? 'active' : '')
                 })

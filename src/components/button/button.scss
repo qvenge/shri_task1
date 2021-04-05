@@ -28,6 +28,10 @@
     }
   }
 
+  &_disabled {
+    pointer-events: none;
+  }
+
   &_disabled &__circle-path,
   &:hover &__circle-path,
   &:active &__circle-path {
